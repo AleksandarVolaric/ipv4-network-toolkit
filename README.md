@@ -1,50 +1,46 @@
 # IPv4 Network Toolkit
 
-A small command-line project for validating IPv4/CIDR input and converting IPv4 addresses between decimal and binary.
+A beginner command-line project for validating IPv4/CIDR input and converting IPv4 addresses and subnet masks.
 
-**Current version:** 0.2.0
+**Current version:** 0.3.0
 
 ## Implemented features
 
-- Accepts an IPv4 address with a CIDR prefix, such as `192.168.10.34/27`.
-- Checks that the address has exactly four octets and each is between 0 and 255.
-- Checks that the prefix is a number from 0 to 32.
-- Converts a valid decimal IPv4 address to four 8-bit binary octets.
-- Validates binary IPv4 input: four octets, each exactly eight bits containing only `0` and `1`.
-- Converts valid binary IPv4 input back to decimal.
+- Validates an IPv4 address with a CIDR prefix, such as `192.168.10.34/27`.
+- Checks for four decimal octets in the range 0-255 and a prefix in the range 0-32.
+- Converts a decimal IPv4 address to four 8-bit binary octets.
+- Validates binary IPv4 input and converts it back to decimal.
+- Converts a CIDR prefix to a subnet mask, such as `/27` to `255.255.255.224`.
+- Validates subnet masks, including that their 1 bits are continuous before their 0 bits.
+- Converts a valid subnet mask to its CIDR prefix, such as `255.255.255.192` to `/26`.
 - Includes pytest tests for validation and conversions.
 
-This version does not calculate network or host details.
+This version does not calculate network or host details and does not provide a menu. The command-line program currently asks for each supported input in sequence.
 
-## Examples
+## Example
 
-Valid input:
-
-```text
-192.168.10.34/27
-```
-
-The program displays its binary form:
+For the input `192.168.10.34/27`, the program displays:
 
 ```text
-11000000.10101000.00001010.00100010
+Binary address: 11000000.10101000.00001010.00100010
+Subnet mask: 255.255.255.224
 ```
 
-For binary-to-decimal conversion, enter:
+It then asks for a binary IPv4 address and a subnet mask to convert. For example:
 
 ```text
 11000000.10101000.00001010.00100010
+255.255.255.192
 ```
 
-The program displays `192.168.10.34`.
-
-Invalid input:
+The corresponding decimal address and CIDR prefix are:
 
 ```text
-192.168.1.256/24
+192.168.10.34
+/26
 ```
 
-The program reports that the octet must be between 0 and 255. Binary input is also checked; each octet must be eight `0` or `1` characters.
+Invalid input produces an error message. For example, `255.0.255.0` is rejected as a subnet mask because its 1 bits are not continuous.
 
 ## Run the program
 
@@ -54,7 +50,7 @@ From the project directory, run:
 python main.py
 ```
 
-Enter an IPv4 address and prefix when prompted. Then enter a binary IPv4 address when prompted for the reverse conversion.
+Follow the prompts to enter a decimal IPv4 address with prefix, a binary IPv4 address, and a subnet mask.
 
 ## Run the tests
 
@@ -68,18 +64,20 @@ python -m pytest
 
 ```text
 .
-├── main.py       # Validation, conversions, and command-line input/output
+├── main.py       # Command-line prompts and output
+├── ipv4.py       # IPv4/CIDR validation and decimal/binary conversions
+├── subnet.py     # Subnet-mask validation and CIDR/mask conversions
 ├── test_main.py  # Tests for validation and conversions
+├── CHANGELOG.md  # Notes on changes by version
 └── README.md
 ```
 
 ## Planned future features
 
-These are not implemented in version 0.2.0:
+These are not implemented in version 0.3.0:
 
-- CIDR to subnet mask conversion
-- Subnet mask to CIDR conversion
 - Network and broadcast address calculation
 - First and last usable host calculation
 - Usable host count
 - Private/public IPv4 detection
+- A menu for choosing which operation to run

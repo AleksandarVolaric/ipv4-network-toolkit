@@ -1,6 +1,7 @@
 import pytest
 
-from main import (ipv4_to_bin, ipv4_to_dec, validate_binary_ipv4, validate_cidr)
+from ipv4 import (ipv4_to_bin, ipv4_to_dec, validate_binary_ipv4, validate_cidr)
+from subnet import (cidr_to_mask, mask_to_cidr, validate_subnet_mask)
 
 
 @pytest.mark.parametrize(
@@ -76,3 +77,44 @@ def test_valid_binary_ipv4():
     assert validate_binary_ipv4(
         "11000000.10101000.00001010.00100010"
     ) is None
+
+
+@pytest.mark.parametrize(
+    ("prefix", "expected"),
+    [
+        ("0", "0.0.0.0"),
+        ("24", "255.255.255.0"),
+        ("27", "255.255.255.224"),
+        ("32", "255.255.255.255"),
+    ],
+)
+def test_cidr_to_mask(prefix, expected):
+    assert cidr_to_mask(prefix) == expected
+
+
+@pytest.mark.parametrize(
+    ("mask", "expected"),
+    [
+        ("0.0.0.0", "0"),
+        ("255.255.255.0", "24"),
+        ("255.255.255.192", "26"),
+        ("255.255.255.255", "32"),
+    ],
+)
+def test_mask_to_cidr(mask, expected):
+    assert validate_subnet_mask(mask) is None
+    assert mask_to_cidr(mask) == expected
+
+
+@pytest.mark.parametrize(
+    "mask",
+    [
+        "255.255.255",
+        "255.255.255.255.0",
+        "255.255.256.0",
+        "255.255.one.0",
+        "255.0.255.0",
+    ],
+)
+def test_invalid_subnet_mask(mask):
+    assert validate_subnet_mask(mask) is not None
