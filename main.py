@@ -1,5 +1,15 @@
 from ipv4 import (ipv4_to_bin, ipv4_to_dec, validate_binary_ipv4, validate_cidr)
-from subnet import cidr_to_mask, mask_to_cidr, validate_subnet_mask
+from subnet import (
+    broadcast_address,
+    cidr_to_mask,
+    mask_to_cidr,
+    network_address,
+    validate_subnet_mask,
+    first_usable_host_address,
+    last_usable_host_address,
+    total_addresses,
+    total_usable_addresses,
+)
 
 
 def main():
@@ -10,6 +20,14 @@ def main():
         address, prefix = user_input.split("/")
         print(f"Binary address: {ipv4_to_bin(address)}")
         print(f"Subnet mask: {cidr_to_mask(prefix)}")
+        network = network_address(address, prefix)
+        broadcast = broadcast_address(address, prefix)
+        print(f"Network address: {network}")
+        print(f"Broadcast address: {broadcast}")
+        print(f"First usable host: {first_usable_host_address(network, prefix)}")
+        print(f"Last usable host: {last_usable_host_address(broadcast, prefix)}")
+        print(f"Total addresses: {total_addresses(prefix)}")
+        print(f"Total usable addresses: {total_usable_addresses(prefix)}")
 
         binary_address = input("Enter a binary IPv4 address: ")
         error = validate_binary_ipv4(binary_address)

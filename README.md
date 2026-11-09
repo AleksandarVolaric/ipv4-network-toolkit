@@ -1,8 +1,8 @@
 # IPv4 Network Toolkit
 
-A beginner command-line project for validating IPv4/CIDR input and converting IPv4 addresses and subnet masks.
+A beginner command-line project for validating IPv4/CIDR input, converting IPv4 addresses and subnet masks, and calculating subnet details.
 
-**Current version:** 0.3.0
+**Current version:** 0.4.0
 
 ## Implemented features
 
@@ -13,9 +13,13 @@ A beginner command-line project for validating IPv4/CIDR input and converting IP
 - Converts a CIDR prefix to a subnet mask, such as `/27` to `255.255.255.224`.
 - Validates subnet masks, including that their 1 bits are continuous before their 0 bits.
 - Converts a valid subnet mask to its CIDR prefix, such as `255.255.255.192` to `/26`.
-- Includes pytest tests for validation and conversions.
+- Calculates network and broadcast addresses.
+- Calculates first and last usable host addresses.
+- Calculates the total number of addresses and usable addresses in a subnet.
+- Handles `/31` subnets as having two usable addresses and `/32` subnets as having one.
+- Includes pytest tests for validation and calculations.
 
-This version does not calculate network or host details and does not provide a menu. The command-line program currently asks for each supported input in sequence.
+The command-line program asks for each supported input in sequence and does not provide a menu.
 
 ## Example
 
@@ -24,6 +28,12 @@ For the input `192.168.10.34/27`, the program displays:
 ```text
 Binary address: 11000000.10101000.00001010.00100010
 Subnet mask: 255.255.255.224
+Network address: 192.168.10.32
+Broadcast address: 192.168.10.63
+First usable host: 192.168.10.33
+Last usable host: 192.168.10.62
+Total addresses: 32
+Total usable addresses: 30
 ```
 
 It then asks for a binary IPv4 address and a subnet mask to convert. For example:
@@ -74,10 +84,7 @@ python -m pytest
 
 ## Planned future features
 
-These are not implemented in version 0.3.0:
+These are not implemented in version 0.4.0:
 
-- Network and broadcast address calculation
-- First and last usable host calculation
-- Usable host count
 - Private/public IPv4 detection
 - A menu for choosing which operation to run

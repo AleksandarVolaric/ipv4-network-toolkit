@@ -40,3 +40,68 @@ def mask_to_cidr(mask):
     octets = mask.split(".")
     binary_mask = "".join(dec_to_bin(octet) for octet in octets)
     return str(binary_mask.count("1"))
+
+
+
+
+def network_address(address, prefix):
+    mask = cidr_to_mask(prefix)
+    address_octets = [int(octet) for octet in address.split(".")]
+    mask_octets = [int(octet) for octet in mask.split(".")]
+    network_octets = [str(address_octets[i] & mask_octets[i]) for i in range(4)]
+    return ".".join(network_octets)
+
+def broadcast_address(address, prefix):
+    mask = cidr_to_mask(prefix)
+    address_octets = [int(octet) for octet in address.split(".")]
+    mask_octets = [int(octet) for octet in mask.split(".")]
+    broadcast_octets = [str(address_octets[i] | (255 - mask_octets[i])) for i in range(4)]
+    return ".".join(broadcast_octets)
+
+
+def first_usable_host_address(network_address, prefix):
+    if int(prefix) >= 31:
+        return network_address
+
+    octets = [int(octet) for octet in network_address.split(".")]
+
+    for i in range(3, -1, -1):
+        if octets[i] < 255:
+            octets[i] += 1
+            break
+        octets[i] = 0
+    else:
+        raise ValueError("Cannot increment the maximum IPv4 address.")
+
+    return ".".join(str(octet) for octet in octets)
+
+def last_usable_host_address(broadcast_address, prefix):
+    if int(prefix) >= 31:
+        return broadcast_address
+
+    octets = [int(octet) for octet in broadcast_address.split(".")]
+
+    for i in range(3, -1, -1):
+        if octets[i] > 0:
+            octets[i] -= 1
+            break
+        octets[i] = 255
+    else:
+        raise ValueError("Cannot decrement the minimum IPv4 address.")
+
+    return ".".join(str(octet) for octet in octets)
+
+
+
+def total_addresses(prefix):
+    prefix = int(prefix)
+    return 2 ** (32 - prefix)
+
+def total_usable_addresses(prefix):
+    prefix = int(prefix)
+    if prefix <= 30:
+        return total_addresses(prefix) - 2
+    elif prefix == 31:
+        return 2  # Both addresses are usable in a /31 subnet
+    else:  # prefix == 32
+        return 1

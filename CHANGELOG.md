@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here.
 
+## 0.4.0
+
+- Added network and broadcast address calculations.
+- Added first and last usable host address calculations.
+- Added total and usable address counts, including `/31` and `/32` handling.
+- Updated the command-line output, tests, and documentation for subnet calculations.
+
 ## 0.3.0
 
 - Added CIDR prefix-to-subnet-mask conversion.

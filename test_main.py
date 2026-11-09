@@ -1,7 +1,17 @@
 import pytest
 
 from ipv4 import (ipv4_to_bin, ipv4_to_dec, validate_binary_ipv4, validate_cidr)
-from subnet import (cidr_to_mask, mask_to_cidr, validate_subnet_mask)
+from subnet import (
+    cidr_to_mask,
+    mask_to_cidr,
+    validate_subnet_mask,
+    network_address,
+    broadcast_address,
+    first_usable_host_address,
+    last_usable_host_address,
+    total_addresses,
+    total_usable_addresses,
+)
 
 
 @pytest.mark.parametrize(
@@ -118,3 +128,82 @@ def test_mask_to_cidr(mask, expected):
 )
 def test_invalid_subnet_mask(mask):
     assert validate_subnet_mask(mask) is not None
+
+
+
+@pytest.mark.parametrize(
+    ("address", "prefix", "expected"),
+    [
+        ("192.168.10.34", 27, "192.168.10.32"),
+        ("10.0.0.1", 8, "10.0.0.0"),
+        ("172.16.0.1", 12, "172.16.0.0"),
+    ],
+)
+def test_network_address(address, prefix, expected):
+    assert network_address(address, prefix) == expected
+
+
+
+@pytest.mark.parametrize(
+    ("address", "prefix", "expected"),
+    [
+        ("192.168.10.34", 27, "192.168.10.63"),
+        ("10.0.0.1", 8, "10.255.255.255"),
+        ("172.16.0.1", 12, "172.31.255.255"),
+    ],
+)
+def test_broadcast_address(address, prefix, expected):
+    assert broadcast_address(address, prefix) == expected
+
+
+
+@pytest.mark.parametrize(
+    ("network", "prefix", "expected"),
+    [
+        ("192.168.10.32", 27, "192.168.10.33"),
+        ("10.0.0.255", 8, "10.0.1.0"),
+        ("192.0.2.0", 31, "192.0.2.0"),
+        ("192.0.2.5", 32, "192.0.2.5"),
+    ],
+)
+def test_first_usable_host_address(network, prefix, expected):
+    assert first_usable_host_address(network, prefix) == expected
+
+
+@pytest.mark.parametrize(
+    ("broadcast", "prefix", "expected"),
+    [
+        ("192.168.10.63", 27, "192.168.10.62"),
+        ("10.0.1.0", 8, "10.0.0.255"),
+        ("192.0.2.1", 31, "192.0.2.1"),
+        ("192.0.2.5", 32, "192.0.2.5"),
+    ],
+)
+def test_last_usable_host_address(broadcast, prefix, expected):
+    assert last_usable_host_address(broadcast, prefix) == expected
+
+
+@pytest.mark.parametrize(
+    ("prefix", "expected"),
+    [
+        (0, 4294967296),
+        (27, 32),
+        (32, 1),
+    ],
+)
+def test_total_addresses(prefix, expected):
+    assert total_addresses(prefix) == expected
+
+
+@pytest.mark.parametrize(
+    ("prefix", "expected"),
+    [
+        (0, 4294967294),
+        (27, 30),
+        (30, 2),
+        (31, 2),
+        (32, 1),
+    ],
+)
+def test_total_usable_addresses(prefix, expected):
+    assert total_usable_addresses(prefix) == expected
