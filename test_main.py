@@ -8,6 +8,7 @@ from ipv4 import (
     classify_ipv4_address,
 )
 
+from main import main
 
 from subnet import (
     cidr_to_mask,
@@ -19,6 +20,7 @@ from subnet import (
     last_usable_host_address,
     total_addresses,
     total_usable_addresses,
+    wildcard_mask,
 )
 
 
@@ -251,3 +253,53 @@ def test_total_addresses(prefix, expected):
 )
 def test_total_usable_addresses(prefix, expected):
     assert total_usable_addresses(prefix) == expected
+
+
+@pytest.mark.parametrize(
+    ("prefix", "expected"),
+    [
+        (0, "255.255.255.255"),
+        (27, "0.0.0.31"),
+        (32, "0.0.0.0"),
+    ],
+)
+def test_wildcard_mask(prefix, expected):
+    assert wildcard_mask(prefix) == expected
+
+
+def test_cli_analysis_returns_to_menu(monkeypatch, capsys):
+    user_inputs = iter(["1", "192.168.10.34/27", "7"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(user_inputs))
+
+    main()
+
+    output = capsys.readouterr().out
+    assert "IPv4 address: 192.168.10.34" in output
+    assert "Wildcard mask: 0.0.0.31" in output
+    assert "Network address: 192.168.10.32" in output
+    assert "IPv4 classification: Private" in output
+    assert output.count("1. Analyze IPv4 network") == 2
+    assert "Goodbye!" in output
+
+
+def test_cli_invalid_cidr_returns_to_menu(monkeypatch, capsys):
+    user_inputs = iter(["1", "192.168.10.999/27", "7"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(user_inputs))
+
+    main()
+
+    output = capsys.readouterr().out
+    assert "Invalid octet: 999." in output
+    assert output.count("1. Analyze IPv4 network") == 2
+
+
+def test_cli_conversion_returns_to_menu(monkeypatch, capsys):
+    user_inputs = iter(["2", "192.168.10.34", "7"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(user_inputs))
+
+    main()
+
+    output = capsys.readouterr().out
+    assert "Binary address: 11000000.10101000.00001010.00100010" in output
+    assert output.count("1. Analyze IPv4 network") == 2
+    assert "Goodbye!" in output

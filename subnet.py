@@ -42,6 +42,12 @@ def mask_to_cidr(mask):
     return str(binary_mask.count("1"))
 
 
+def wildcard_mask(prefix):
+    mask_octets = cidr_to_mask(prefix).split(".")
+    wildcard_octets = [str(255 - int(octet)) for octet in mask_octets]
+    return ".".join(wildcard_octets)
+
+
 
 
 def network_address(address, prefix):

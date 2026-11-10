@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here.
 
+## 0.6.0
+
+- Added a CLI menu so users can choose one operation at a time.
+- Added a basic Tkinter GUI for network analysis and standalone conversions.
+- Added a reusable wildcard-mask calculation.
+- Both interfaces reuse the existing IPv4 and subnet functions.
+
 ## 0.5.0
 
 - Added IPv4 address classification for private, public, loopback, link-local, multicast, unspecified, and limited broadcast addresses.

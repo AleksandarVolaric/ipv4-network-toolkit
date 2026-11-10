@@ -1,8 +1,8 @@
 # IPv4 Network Toolkit
 
-A beginner command-line project for validating and converting IPv4 addresses, calculating subnet details, and classifying IPv4 addresses.
+A beginner IPv4 toolkit with a command-line menu and a simple Tkinter GUI. Both interfaces use the same validation, conversion, subnet calculation, and classification functions.
 
-**Current version:** 0.5.0
+**Current version:** 0.6.0
 
 ## Implemented features
 
@@ -14,13 +14,14 @@ A beginner command-line project for validating and converting IPv4 addresses, ca
 - Validates subnet masks, including that their 1 bits are continuous before their 0 bits.
 - Converts a valid subnet mask to its CIDR prefix, such as `255.255.255.192` to `/26`.
 - Calculates network and broadcast addresses.
+- Calculates the wildcard mask from a CIDR prefix.
 - Calculates first and last usable host addresses.
 - Calculates the total number of addresses and usable addresses in a subnet.
 - Handles `/31` subnets as having two usable addresses and `/32` subnets as having one.
 - Classifies IPv4 addresses as private, public, loopback, link-local, multicast, unspecified, or limited broadcast.
-- Includes pytest tests for validation, conversions, calculations, and classification.
-
-The command-line program asks for each supported input in sequence and does not provide a menu.
+- Provides a CLI menu for network analysis and standalone conversions.
+- Provides a basic Tkinter GUI for network analysis and standalone conversions.
+- Includes pytest tests for validation, conversions, calculations, classification, and CLI behavior.
 
 ## Example
 
@@ -30,6 +31,7 @@ For the input `192.168.10.34/27`, the program displays:
 Binary address: 11000000.10101000.00001010.00100010
 IPv4 classification: Private
 Subnet mask: 255.255.255.224
+Wildcard mask: 0.0.0.31
 Network address: 192.168.10.32
 Broadcast address: 192.168.10.63
 First usable host: 192.168.10.33
@@ -38,7 +40,7 @@ Total addresses: 32
 Total usable addresses: 30
 ```
 
-It then asks for a binary IPv4 address and a subnet mask to convert. For example:
+After analysis, the CLI returns to its menu. The standalone conversion options can be selected separately. For example, converting this binary address:
 
 ```text
 11000000.10101000.00001010.00100010
@@ -54,7 +56,7 @@ The corresponding decimal address and CIDR prefix are:
 
 Invalid input produces an error message. For example, `255.0.255.0` is rejected as a subnet mask because its 1 bits are not continuous.
 
-## Run the program
+## Run the command-line interface
 
 From the project directory, run:
 
@@ -62,7 +64,17 @@ From the project directory, run:
 python main.py
 ```
 
-Follow the prompts to enter a decimal IPv4 address with prefix, a binary IPv4 address, and a subnet mask.
+Choose an operation from the menu. The CLI asks only for input relevant to that operation and returns to the menu when it finishes.
+
+## Run the graphical interface
+
+From the project directory, run:
+
+```text
+python gui.py
+```
+
+Enter an IPv4 address with a CIDR prefix and select **Analyze** to see subnet details. The GUI also provides separate fields for decimal-to-binary, binary-to-decimal, CIDR-to-mask, and mask-to-CIDR conversions. Both the CLI and GUI call the same functions in `ipv4.py` and `subnet.py`; their input and display code does not perform its own networking calculations.
 
 ## Run the tests
 
@@ -76,16 +88,15 @@ python -m pytest
 
 ```text
 .
-├── main.py       # Command-line prompts and output
+├── main.py       # Command-line menu and output
+├── gui.py        # Tkinter graphical interface
 ├── ipv4.py       # IPv4/CIDR validation and decimal/binary conversions
-├── subnet.py     # Subnet-mask validation and CIDR/mask conversions
-├── test_main.py  # Tests for validation and conversions
+├── subnet.py     # Subnet-mask validation and subnet calculations
+├── test_main.py  # Tests for validation, conversions, and calculations
 ├── CHANGELOG.md  # Notes on changes by version
 └── README.md
 ```
 
-## Planned future features
+## Current limitations
 
-These are not implemented in version 0.5.0:
-
-- A menu for choosing which operation to run
+The GUI is intentionally basic and is intended as a learning interface. The toolkit does not currently provide a menu for choosing a language.
