@@ -1,6 +1,14 @@
 import pytest
 
-from ipv4 import (ipv4_to_bin, ipv4_to_dec, validate_binary_ipv4, validate_cidr)
+from ipv4 import (
+    ipv4_to_bin,
+    ipv4_to_dec,
+    validate_binary_ipv4,
+    validate_cidr,
+    classify_ipv4_address,
+)
+
+
 from subnet import (
     cidr_to_mask,
     mask_to_cidr,
@@ -87,6 +95,42 @@ def test_valid_binary_ipv4():
     assert validate_binary_ipv4(
         "11000000.10101000.00001010.00100010"
     ) is None
+
+
+@pytest.mark.parametrize(
+    ("address", "expected"),
+    [
+        ("0.0.0.0", "Unspecified"),
+        ("255.255.255.255", "Limited broadcast"),
+        ("127.0.0.0", "Loopback"),
+        ("127.255.255.255", "Loopback"),
+        ("126.255.255.255", "Public"),
+        ("128.0.0.0", "Public"),
+        ("169.254.0.0", "Link-local"),
+        ("169.254.255.255", "Link-local"),
+        ("169.253.255.255", "Public"),
+        ("169.255.0.0", "Public"),
+        ("10.0.0.0", "Private"),
+        ("10.255.255.255", "Private"),
+        ("9.255.255.255", "Public"),
+        ("11.0.0.0", "Public"),
+        ("172.16.0.0", "Private"),
+        ("172.31.255.255", "Private"),
+        ("172.15.255.255", "Public"),
+        ("172.32.0.0", "Public"),
+        ("192.168.0.0", "Private"),
+        ("192.168.255.255", "Private"),
+        ("192.167.255.255", "Public"),
+        ("192.169.0.0", "Public"),
+        ("224.0.0.0", "Multicast"),
+        ("239.255.255.255", "Multicast"),
+        ("223.255.255.255", "Public"),
+        ("240.0.0.0", "Public"),
+        ("8.8.8.8", "Public"),
+    ],
+)
+def test_classify_ipv4_address(address, expected):
+    assert classify_ipv4_address(address) == expected
 
 
 @pytest.mark.parametrize(

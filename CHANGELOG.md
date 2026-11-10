@@ -2,6 +2,12 @@
 
 Notable project changes are recorded here.
 
+## 0.5.0
+
+- Added IPv4 address classification for private, public, loopback, link-local, multicast, unspecified, and limited broadcast addresses.
+- Added boundary tests for the supported classification ranges.
+- Updated the command-line output and README for address classification.
+
 ## 0.4.0
 
 - Added network and broadcast address calculations.

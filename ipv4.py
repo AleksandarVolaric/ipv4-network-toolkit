@@ -64,3 +64,25 @@ def ipv4_to_dec(binary_address):
     binary_octets = binary_address.split(".")
     decimal_octets = [bin_to_dec(octet) for octet in binary_octets]
     return ".".join(decimal_octets)
+
+
+def classify_ipv4_address(address):
+    octets = [int(octet) for octet in address.split(".")]
+    if address == "0.0.0.0":
+        return "Unspecified"
+    elif address == "255.255.255.255":
+        return "Limited broadcast"
+    elif octets[0] == 127:
+        return "Loopback"
+    elif octets[0] == 169 and octets [1] == 254:
+        return "Link-local"
+    elif octets[0] == 10:
+        return "Private"
+    elif octets[0] == 172 and 16 <= octets[1] <= 31:
+        return "Private"
+    elif octets[0] == 192 and octets[1] == 168:
+        return "Private"
+    elif 224 <= octets[0] <= 239:
+        return "Multicast"
+    else:
+        return "Public"

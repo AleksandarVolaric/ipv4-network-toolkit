@@ -1,8 +1,8 @@
 # IPv4 Network Toolkit
 
-A beginner command-line project for validating IPv4/CIDR input, converting IPv4 addresses and subnet masks, and calculating subnet details.
+A beginner command-line project for validating and converting IPv4 addresses, calculating subnet details, and classifying IPv4 addresses.
 
-**Current version:** 0.4.0
+**Current version:** 0.5.0
 
 ## Implemented features
 
@@ -17,7 +17,8 @@ A beginner command-line project for validating IPv4/CIDR input, converting IPv4 
 - Calculates first and last usable host addresses.
 - Calculates the total number of addresses and usable addresses in a subnet.
 - Handles `/31` subnets as having two usable addresses and `/32` subnets as having one.
-- Includes pytest tests for validation and calculations.
+- Classifies IPv4 addresses as private, public, loopback, link-local, multicast, unspecified, or limited broadcast.
+- Includes pytest tests for validation, conversions, calculations, and classification.
 
 The command-line program asks for each supported input in sequence and does not provide a menu.
 
@@ -27,6 +28,7 @@ For the input `192.168.10.34/27`, the program displays:
 
 ```text
 Binary address: 11000000.10101000.00001010.00100010
+IPv4 classification: Private
 Subnet mask: 255.255.255.224
 Network address: 192.168.10.32
 Broadcast address: 192.168.10.63
@@ -84,7 +86,6 @@ python -m pytest
 
 ## Planned future features
 
-These are not implemented in version 0.4.0:
+These are not implemented in version 0.5.0:
 
-- Private/public IPv4 detection
 - A menu for choosing which operation to run
