@@ -147,6 +147,8 @@ def test_total_usable_addresses(prefix, expected):
 def test_wildcard_mask(prefix, expected):
     assert wildcard_mask(prefix) == expected
 
+
+
 # Compare the project calculations with Python's standard-library reference.
 @pytest.mark.parametrize(
     ("address", "prefix"),

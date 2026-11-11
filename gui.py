@@ -22,6 +22,7 @@ from subnet import (
 )
 
 
+
 def main():
     """Create and run the graphical interface."""
     window = tk.Tk()

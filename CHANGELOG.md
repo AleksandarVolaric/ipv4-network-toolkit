@@ -2,6 +2,11 @@
 
 Notable project changes are recorded here.
 
+## 1.0.0
+
+- Prepared the first stable release after final testing and documentation review.
+- No new networking features were added in this release.
+
 ## 0.7.0
 
 - Organized tests into separate files for IPv4, subnet, and CLI behavior.

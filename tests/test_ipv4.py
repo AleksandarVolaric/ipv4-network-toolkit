@@ -86,6 +86,7 @@ def test_valid_binary_ipv4():
     ) is None
 
 
+
 # IPv4 address classification, including range boundaries
 @pytest.mark.parametrize(
     ("address", "expected"),

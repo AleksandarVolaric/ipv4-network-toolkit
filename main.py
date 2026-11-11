@@ -20,6 +20,7 @@ from subnet import (
 )
 
 
+
 def show_network_analysis(user_input):
     """Validate and print the analysis results for one IPv4/CIDR input."""
     error = validate_cidr(user_input)
@@ -43,6 +44,7 @@ def show_network_analysis(user_input):
     print(f"Total addresses: {total_addresses(prefix)}")
     print(f"Usable hosts: {total_usable_addresses(prefix)}")
     print(f"IPv4 classification: {classify_ipv4_address(address)}")
+
 
 
 def main():
@@ -102,6 +104,7 @@ def main():
             break
         else:
             print("Invalid menu choice. Enter a number from 1 to 7.")
+
 
 
 if __name__ == "__main__":

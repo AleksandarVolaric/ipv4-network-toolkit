@@ -53,7 +53,6 @@ def wildcard_mask(prefix):
 
 
 
-
 def network_address(address, prefix):
     """Return the network address for an IPv4 address and CIDR prefix."""
     mask = cidr_to_mask(prefix)
@@ -69,6 +68,7 @@ def broadcast_address(address, prefix):
     mask_octets = [int(octet) for octet in mask.split(".")]
     broadcast_octets = [str(address_octets[i] | (255 - mask_octets[i])) for i in range(4)]
     return ".".join(broadcast_octets)
+
 
 
 def first_usable_host_address(network_address, prefix):

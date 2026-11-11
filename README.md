@@ -1,36 +1,33 @@
 # IPv4 Network Toolkit
 
-A beginner IPv4 toolkit with a command-line menu and a simple Tkinter GUI. Both interfaces use the same validation, conversion, subnet calculation, and classification functions.
+A beginner project for exploring IPv4 addresses, CIDR prefixes, and subnet calculations through a command-line menu or a simple graphical interface.
 
-**Current version:** 0.7.0
+**Current stable version:** 1.0.0
 
-## Implemented features
+## Motivation
 
-- Validates an IPv4 address with a CIDR prefix, such as `192.168.10.34/27`.
-- Checks for four decimal octets in the range 0-255 and a prefix in the range 0-32.
-- Converts a decimal IPv4 address to four 8-bit binary octets.
-- Validates binary IPv4 input and converts it back to decimal.
-- Converts a CIDR prefix to a subnet mask, such as `/27` to `255.255.255.224`.
-- Validates subnet masks, including that their 1 bits are continuous before their 0 bits.
-- Converts a valid subnet mask to its CIDR prefix, such as `255.255.255.192` to `/26`.
-- Calculates network and broadcast addresses.
-- Calculates the wildcard mask from a CIDR prefix.
-- Calculates first and last usable host addresses.
-- Calculates the total number of addresses and usable addresses in a subnet.
-- Handles `/31` subnets as having two usable addresses and `/32` subnets as having one.
-- Classifies IPv4 addresses as private, public, loopback, link-local, multicast, unspecified, or limited broadcast.
-- Provides a CLI menu for network analysis and standalone conversions.
-- Provides a basic Tkinter GUI for network analysis and standalone conversions.
-- Includes pytest tests organized by IPv4 functionality, subnet calculations, and CLI behavior.
-- Uses Python's standard-library `ipaddress` module in selected tests to verify subnet calculation results.
+This project was built as a learning and portfolio project after CS50P. It provides a way to practice Python by implementing IPv4 validation and subnet calculations, then using those functions from both a CLI and a GUI.
+
+## Features
+
+- Validates IPv4 addresses, CIDR prefixes, binary IPv4 addresses, and subnet masks.
+- Converts decimal IPv4 addresses to binary and binary addresses back to decimal.
+- Converts between CIDR prefixes and subnet masks.
+- Calculates wildcard masks, network addresses, and broadcast addresses.
+- Calculates first and last usable host addresses, total addresses, and usable hosts.
+- Classifies addresses as private, public, loopback, link-local, multicast, unspecified, or limited broadcast.
+- Provides a menu-driven command-line interface and a basic Tkinter GUI.
+- Uses the same calculation and validation functions for both interfaces.
+- Includes pytest tests for the functions, CLI behavior, and selected subnet comparisons with Python's standard-library `ipaddress` module.
 
 ## Example
 
-For the input `192.168.10.34/27`, the program displays:
+For `192.168.10.34/27`, network analysis displays:
 
 ```text
+IPv4 address: 192.168.10.34
+CIDR prefix: /27
 Binary address: 11000000.10101000.00001010.00100010
-IPv4 classification: Private
 Subnet mask: 255.255.255.224
 Wildcard mask: 0.0.0.31
 Network address: 192.168.10.32
@@ -38,24 +35,9 @@ Broadcast address: 192.168.10.63
 First usable host: 192.168.10.33
 Last usable host: 192.168.10.62
 Total addresses: 32
-Total usable addresses: 30
+Usable hosts: 30
+IPv4 classification: Private
 ```
-
-After analysis, the CLI returns to its menu. The standalone conversion options can be selected separately. For example, converting this binary address:
-
-```text
-11000000.10101000.00001010.00100010
-255.255.255.192
-```
-
-The corresponding decimal address and CIDR prefix are:
-
-```text
-192.168.10.34
-/26
-```
-
-Invalid input produces an error message. For example, `255.0.255.0` is rejected as a subnet mask because its 1 bits are not continuous.
 
 ## Run the command-line interface
 
@@ -65,7 +47,7 @@ From the project directory, run:
 python main.py
 ```
 
-Choose an operation from the menu. The CLI asks only for input relevant to that operation and returns to the menu when it finishes.
+Choose an operation from the menu. The CLI asks only for the input relevant to that operation and returns to the menu when it finishes.
 
 ## Run the graphical interface
 
@@ -75,34 +57,45 @@ From the project directory, run:
 python gui.py
 ```
 
-Enter an IPv4 address with a CIDR prefix and select **Analyze** to see subnet details. The GUI also provides separate fields for decimal-to-binary, binary-to-decimal, CIDR-to-mask, and mask-to-CIDR conversions. Both the CLI and GUI call the same functions in `ipv4.py` and `subnet.py`; their input and display code does not perform its own networking calculations.
+Enter an IPv4 address with a CIDR prefix and select **Analyze** to see subnet details. The GUI also has separate conversion tools for decimal/binary IPv4 addresses and CIDR/subnet masks.
+
+Both interfaces call the same functions in `ipv4.py` and `subnet.py`. The user interfaces collect input and display results; they do not implement separate networking calculations.
 
 ## Run the tests
 
-Install pytest if needed, then run:
+Install pytest if needed, then run from the project directory:
 
 ```text
 python -m pytest
 ```
 
+The application uses Python and the standard-library Tkinter GUI toolkit. Tests use pytest and Python's standard-library `ipaddress` module for selected verification comparisons.
+
 ## Project structure
 
 ```text
 .
-├── main.py       # Command-line menu and output
-├── gui.py        # Tkinter graphical interface
-├── ipv4.py       # IPv4/CIDR validation and decimal/binary conversions
-├── subnet.py     # Subnet-mask validation and subnet calculations
+├── main.py             # Command-line menu
+├── gui.py              # Tkinter graphical interface
+├── ipv4.py             # IPv4 validation, conversion, and classification
+├── subnet.py           # Subnet validation and calculations
 ├── tests/
-│   ├── test_ipv4.py  # IPv4 validation, conversions, and classification
+│   ├── test_ipv4.py    # IPv4 validation, conversions, and classification
 │   ├── test_subnet.py  # Subnet validation and calculations
-│   └── test_cli.py  # CLI menu behavior
-├── CHANGELOG.md  # Notes on changes by version
+│   └── test_cli.py     # CLI menu behavior
+├── CHANGELOG.md        # Development history
 └── README.md
 ```
 
-## Current limitations
+## Technical overview
 
-The GUI is intentionally basic and is intended as a learning interface. The toolkit does not currently provide a menu for choosing a language.
+The reusable validation and IPv4 functions are in `ipv4.py`; subnet-mask and subnet calculations are in `subnet.py`. The CLI and GUI import those functions and use them to process user input. The `ipaddress` module is only used in tests as a reference for selected subnet results.
 
-Some subnet and host-count conventions for `/31` and `/32` are project assumptions documented by tests; `ipaddress` is used only to verify selected network calculations, not by the application itself.
+## Known limitations
+
+- The GUI is intentionally basic and is meant for learning, not as a polished application.
+- Address classification follows the project's listed categories; addresses outside them are labeled public, which is a simplified rule and does not guarantee global reachability.
+- Usable-host counts use the project's stated conventions: `/31` has two usable addresses and `/32` has one.
+- There is no language-selection feature.
+
+See [CHANGELOG.md](./CHANGELOG.md) for the version history.

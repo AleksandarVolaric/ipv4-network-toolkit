@@ -72,6 +72,7 @@ def ipv4_to_dec(binary_address):
     return ".".join(decimal_octets)
 
 
+
 def classify_ipv4_address(address):
     """Return the toolkit's classification for a validated IPv4 address."""
     octets = [int(octet) for octet in address.split(".")]

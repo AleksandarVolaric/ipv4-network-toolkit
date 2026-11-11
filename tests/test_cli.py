@@ -17,6 +17,7 @@ def test_cli_analysis_returns_to_menu(monkeypatch, capsys):
     assert "Goodbye!" in output
 
 
+
 def test_cli_invalid_cidr_returns_to_menu(monkeypatch, capsys):
     user_inputs = iter(["1", "192.168.10.999/27", "7"])
     monkeypatch.setattr("builtins.input", lambda prompt: next(user_inputs))
@@ -26,6 +27,7 @@ def test_cli_invalid_cidr_returns_to_menu(monkeypatch, capsys):
     output = capsys.readouterr().out
     assert "Invalid octet: 999." in output
     assert output.count("1. Analyze IPv4 network") == 2
+
 
 
 def test_cli_conversion_returns_to_menu(monkeypatch, capsys):
