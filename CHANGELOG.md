@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here.
 
+## 0.7.0
+
+- Organized tests into separate files for IPv4, subnet, and CLI behavior.
+- Added selected subnet verification tests using Python's standard-library `ipaddress` module.
+- Added docstrings to reusable functions and interface entry points.
+- Updated the README to describe the test layout and verification approach.
+
 ## 0.6.0
 
 - Added a CLI menu so users can choose one operation at a time.

@@ -2,7 +2,7 @@
 
 A beginner IPv4 toolkit with a command-line menu and a simple Tkinter GUI. Both interfaces use the same validation, conversion, subnet calculation, and classification functions.
 
-**Current version:** 0.6.0
+**Current version:** 0.7.0
 
 ## Implemented features
 
@@ -21,7 +21,8 @@ A beginner IPv4 toolkit with a command-line menu and a simple Tkinter GUI. Both 
 - Classifies IPv4 addresses as private, public, loopback, link-local, multicast, unspecified, or limited broadcast.
 - Provides a CLI menu for network analysis and standalone conversions.
 - Provides a basic Tkinter GUI for network analysis and standalone conversions.
-- Includes pytest tests for validation, conversions, calculations, classification, and CLI behavior.
+- Includes pytest tests organized by IPv4 functionality, subnet calculations, and CLI behavior.
+- Uses Python's standard-library `ipaddress` module in selected tests to verify subnet calculation results.
 
 ## Example
 
@@ -92,7 +93,10 @@ python -m pytest
 ├── gui.py        # Tkinter graphical interface
 ├── ipv4.py       # IPv4/CIDR validation and decimal/binary conversions
 ├── subnet.py     # Subnet-mask validation and subnet calculations
-├── test_main.py  # Tests for validation, conversions, and calculations
+├── tests/
+│   ├── test_ipv4.py  # IPv4 validation, conversions, and classification
+│   ├── test_subnet.py  # Subnet validation and calculations
+│   └── test_cli.py  # CLI menu behavior
 ├── CHANGELOG.md  # Notes on changes by version
 └── README.md
 ```
@@ -100,3 +104,5 @@ python -m pytest
 ## Current limitations
 
 The GUI is intentionally basic and is intended as a learning interface. The toolkit does not currently provide a menu for choosing a language.
+
+Some subnet and host-count conventions for `/31` and `/32` are project assumptions documented by tests; `ipaddress` is used only to verify selected network calculations, not by the application itself.

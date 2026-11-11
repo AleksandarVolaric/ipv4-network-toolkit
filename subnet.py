@@ -2,6 +2,7 @@ from ipv4 import bin_to_dec, dec_to_bin
 
 
 def validate_subnet_mask(mask):
+    """Return an error message if the subnet mask is invalid, otherwise None."""
     octets = mask.split(".")
 
     if len(octets) != 4:
@@ -24,6 +25,7 @@ def validate_subnet_mask(mask):
 
 
 def cidr_to_mask(prefix):
+    """Convert a CIDR prefix to a dotted-decimal subnet mask."""
     prefix = int(prefix)
     binary_mask = "1" * prefix + "0" * (32 - prefix)
     octets = [
@@ -37,12 +39,14 @@ def cidr_to_mask(prefix):
 
 
 def mask_to_cidr(mask):
+    """Convert a valid dotted-decimal subnet mask to its CIDR prefix."""
     octets = mask.split(".")
     binary_mask = "".join(dec_to_bin(octet) for octet in octets)
     return str(binary_mask.count("1"))
 
 
 def wildcard_mask(prefix):
+    """Return the wildcard mask for a CIDR prefix."""
     mask_octets = cidr_to_mask(prefix).split(".")
     wildcard_octets = [str(255 - int(octet)) for octet in mask_octets]
     return ".".join(wildcard_octets)
@@ -51,6 +55,7 @@ def wildcard_mask(prefix):
 
 
 def network_address(address, prefix):
+    """Return the network address for an IPv4 address and CIDR prefix."""
     mask = cidr_to_mask(prefix)
     address_octets = [int(octet) for octet in address.split(".")]
     mask_octets = [int(octet) for octet in mask.split(".")]
@@ -58,6 +63,7 @@ def network_address(address, prefix):
     return ".".join(network_octets)
 
 def broadcast_address(address, prefix):
+    """Return the broadcast address for an IPv4 address and CIDR prefix."""
     mask = cidr_to_mask(prefix)
     address_octets = [int(octet) for octet in address.split(".")]
     mask_octets = [int(octet) for octet in mask.split(".")]
@@ -66,6 +72,7 @@ def broadcast_address(address, prefix):
 
 
 def first_usable_host_address(network_address, prefix):
+    """Return the first usable address, following the project's /31 and /32 rules."""
     if int(prefix) >= 31:
         return network_address
 
@@ -82,6 +89,7 @@ def first_usable_host_address(network_address, prefix):
     return ".".join(str(octet) for octet in octets)
 
 def last_usable_host_address(broadcast_address, prefix):
+    """Return the last usable address, following the project's /31 and /32 rules."""
     if int(prefix) >= 31:
         return broadcast_address
 
@@ -100,10 +108,12 @@ def last_usable_host_address(broadcast_address, prefix):
 
 
 def total_addresses(prefix):
+    """Return the total number of addresses in a CIDR subnet."""
     prefix = int(prefix)
     return 2 ** (32 - prefix)
 
 def total_usable_addresses(prefix):
+    """Return usable host count, including the project's /31 and /32 conventions."""
     prefix = int(prefix)
     if prefix <= 30:
         return total_addresses(prefix) - 2

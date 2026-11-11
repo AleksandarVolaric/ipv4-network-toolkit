@@ -1,4 +1,5 @@
 def validate_cidr(user_input):
+    """Return an error message if the IPv4/CIDR input is invalid, otherwise None."""
     parts = user_input.strip().split("/")
 
     if len(parts) != 2:
@@ -28,6 +29,7 @@ def validate_cidr(user_input):
 
 
 def validate_binary_ipv4(binary_address):
+    """Return an error message if the binary IPv4 address is invalid, otherwise None."""
     octets = binary_address.split(".")
 
     if len(octets) != 4:
@@ -46,10 +48,12 @@ def validate_binary_ipv4(binary_address):
 
 
 def dec_to_bin(octet):
+    """Convert one decimal IPv4 octet to an 8-bit binary string."""
     return format(int(octet), "08b")
 
 
 def ipv4_to_bin(address):
+    """Convert a dotted-decimal IPv4 address to four binary octets."""
     octets = address.split(".")
     binary_octets = [dec_to_bin(octet) for octet in octets]
     return ".".join(binary_octets)
@@ -57,16 +61,19 @@ def ipv4_to_bin(address):
 
 
 def bin_to_dec(binary_octet):
+    """Convert one 8-bit binary octet to a decimal string."""
     return str(int(binary_octet, 2))
 
 
 def ipv4_to_dec(binary_address):
+    """Convert four binary IPv4 octets to a dotted-decimal address."""
     binary_octets = binary_address.split(".")
     decimal_octets = [bin_to_dec(octet) for octet in binary_octets]
     return ".".join(decimal_octets)
 
 
 def classify_ipv4_address(address):
+    """Return the toolkit's classification for a validated IPv4 address."""
     octets = [int(octet) for octet in address.split(".")]
     if address == "0.0.0.0":
         return "Unspecified"

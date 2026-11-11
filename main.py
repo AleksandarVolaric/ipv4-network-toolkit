@@ -21,6 +21,7 @@ from subnet import (
 
 
 def show_network_analysis(user_input):
+    """Validate and print the analysis results for one IPv4/CIDR input."""
     error = validate_cidr(user_input)
     if error is not None:
         print(error)
@@ -45,6 +46,7 @@ def show_network_analysis(user_input):
 
 
 def main():
+    """Run the command-line menu until the user chooses Exit."""
     while True:
         print("\nIPv4 Network Toolkit")
         print("1. Analyze IPv4 network")

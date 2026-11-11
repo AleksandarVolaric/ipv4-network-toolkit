@@ -23,6 +23,7 @@ from subnet import (
 
 
 def main():
+    """Create and run the graphical interface."""
     window = tk.Tk()
     window.title("IPv4 Network Toolkit")
     window.geometry("650x750")
